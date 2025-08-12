@@ -5,10 +5,10 @@
     - [x] Add typescript configuration
     - [x] Add eslint and prettier configuration
     - [x] Add jest configuration
-    - [ ] Add placeholder pages for all pages in the app
+    - [x] Add placeholder pages for all pages in the app
     - [x] Implement API-level test suite harness
     - [x] Implement basic e2e test harness with playwright
-    - [ ] Add GitHub Actions workflow for CI/CD
+    - [x] Add GitHub Actions workflow for CI/CD
     - [ ] Implement homepage
     - [ ] Implement app shell UI layout (dummy content for now)
 - [ ] User Functionality (Basic)
