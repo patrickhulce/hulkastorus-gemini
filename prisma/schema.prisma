@@ -1,0 +1,25 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String    @id @default(cuid()) @map("id") // Using cuid() for NanoID-like behavior
+  email             String    @unique
+  password          String
+  first_name        String?   // Optional as per typical user registration flows
+  last_name         String?   // Optional
+  invite_code       String?   // Optional
+  is_email_verified Boolean   @default(false)
+  created_at        DateTime  @default(now()) @map("created_at")
+  updated_at        DateTime  @updatedAt @map("updated_at")
+
+  @@map("users") // Map model name to table name
+}
