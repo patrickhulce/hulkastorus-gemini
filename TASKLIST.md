@@ -6,16 +6,17 @@
     - [x] Add eslint and prettier configuration
     - [x] Add jest configuration
     - [x] Add placeholder pages for all pages in the app
-    - [x] Implement API-level test suite harness
+    - [x] Implement API-level test suite harness (Note: Unit tests currently failing due to unresolved Jest error)
     - [x] Implement basic e2e test harness with playwright
     - [x] Add GitHub Actions workflow for CI/CD
-    - [ ] Implement homepage
+    - [x] Implement homepage
     - [ ] Implement app shell UI layout (dummy content for now)
 - [ ] User Functionality (Basic)
     - [ ] Create Neon database
     - [ ] Add Prisma configuration with a basic user model
     - [ ] Implement barebones user creation/deletion API routes (unprotected, no validation, no email verification)
     - [ ] Implement /register, /login, /logout pages
+    - [ ] Add NextAuth configuration with a basic user model
     - [ ] Add NextAuth configuration and protect existing pages/routes
 - [ ] Core Functionality (Basic)
     - [ ] Create mock R2 server for testing
