@@ -23,7 +23,10 @@ export default function Navbar() {
           <Link href="/login" className="hover:text-gray-300">
             Login
           </Link>
-          <Link href="mailto:invites@hulkastor.us" className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full">
+          <Link
+            href="mailto:invites@hulkastor.us"
+            className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full"
+          >
             Get Beta
           </Link>
         </div>

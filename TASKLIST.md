@@ -6,7 +6,7 @@
     - [x] Add eslint and prettier configuration
     - [x] Add jest configuration
     - [x] Add placeholder pages for all pages in the app
-    - [x] Implement API-level test suite harness (Note: Unit tests currently failing due to unresolved Jest error)
+    - [x] Implement API-level test suite harness
     - [x] Implement basic e2e test harness with playwright
     - [x] Add GitHub Actions workflow for CI/CD
     - [x] Implement homepage

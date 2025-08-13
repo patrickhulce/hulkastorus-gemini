@@ -18,17 +18,21 @@ export default function HomePage() {
         <section className="relative h-[40vh] flex flex-col items-center justify-center text-center px-4">
           {/* Placeholder for Hex-dino illustration */}
           <div className="absolute inset-0 bg-gradient-to-br from-purple-800 to-indigo-900 opacity-30"></div>
-          <h1 className="text-5xl font-bold mb-4 z-10">
-            Dev-Friendly Cloud Storage, Hulk-Strong.
-          </h1>
+          <h1 className="text-5xl font-bold mb-4 z-10">Dev-Friendly Cloud Storage, Hulk-Strong.</h1>
           <p className="text-xl mb-8 z-10">
             Instant public URLs & frictionless CLI / Python uploads — minus the SDK bloat.
           </p>
           <div className="flex space-x-4 z-10">
-            <Link href="mailto:invites@hulkastor.us" className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-full">
+            <Link
+              href="mailto:invites@hulkastor.us"
+              className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-full"
+            >
               Request an Invite
             </Link>
-            <Link href="/docs" className="border border-white text-white font-bold py-3 px-6 rounded-full">
+            <Link
+              href="/docs"
+              className="border border-white text-white font-bold py-3 px-6 rounded-full"
+            >
               Read the Docs
             </Link>
           </div>
@@ -60,7 +64,9 @@ export default function HomePage() {
             </div>
             <div className="bg-gray-700 p-6 rounded-lg shadow-lg">
               <h3 className="text-2xl font-bold mb-2">📦 ML-Asset Ready</h3>
-              <p>Multipart, resumable uploads; content-addressed caching; MD5 + SHA-256 integrity</p>
+              <p>
+                Multipart, resumable uploads; content-addressed caching; MD5 + SHA-256 integrity
+              </p>
             </div>
           </div>
         </section>
@@ -75,9 +81,10 @@ export default function HomePage() {
               <pre className="bg-black p-4 rounded text-sm">
                 <code>
                   Tabs: [ Bash ] [ Python ]<br />
-                  $ hulk put model.ckpt<br />
-                  https://hulk.st/or.us/abc123<br />
-                  — copied to clipboard ✅
+                  $ hulk put model.ckpt
+                  <br />
+                  https://hulk.st/or.us/abc123
+                  <br />— copied to clipboard ✅
                 </code>
               </pre>
             </div>
@@ -90,7 +97,10 @@ export default function HomePage() {
                 </p>
                 <p className="text-lg font-semibold">— ML Infra Lead, VFX Co.</p>
               </div>
-              <Link href="mailto:invites@hulkastor.us" className="mt-4 bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-full self-start">
+              <Link
+                href="mailto:invites@hulkastor.us"
+                className="mt-4 bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-full self-start"
+              >
                 Request Early Access
               </Link>
             </div>
@@ -155,17 +165,26 @@ export default function HomePage() {
                   <tr>
                     <td className="p-4 border-b border-gray-700">CTA</td>
                     <td className="p-4 border-b border-gray-700">
-                      <Link href="mailto:invites@hulkastor.us" className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full text-sm">
+                      <Link
+                        href="mailto:invites@hulkastor.us"
+                        className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full text-sm"
+                      >
                         Get Free
                       </Link>
                     </td>
                     <td className="p-4 border-b border-gray-700">
-                      <Link href="mailto:invites@hulkastor.us" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full text-sm">
+                      <Link
+                        href="mailto:invites@hulkastor.us"
+                        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full text-sm"
+                      >
                         Join Waitlist
                       </Link>
                     </td>
                     <td className="p-4 border-b border-gray-700">
-                      <Link href="mailto:invites@hulkastor.us" className="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-full text-sm">
+                      <Link
+                        href="mailto:invites@hulkastor.us"
+                        className="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-full text-sm"
+                      >
                         Contact Sales
                       </Link>
                     </td>
@@ -179,7 +198,25 @@ export default function HomePage() {
 
       {/* Footer */}
       <footer className="py-8 px-4 bg-gray-800 text-center text-gray-400">
-        <p>© 2025 Hulkastorus • <Link href="/privacy" className="hover:underline">Privacy</Link> • <Link href="/terms" className="hover:underline">Terms</Link> • <Link href="https://twitter.com/hulkastorus" target="_blank" rel="noopener noreferrer" className="hover:underline">Twitter</Link></p>
+        <p>
+          © 2025 Hulkastorus •{" "}
+          <Link href="/privacy" className="hover:underline">
+            Privacy
+          </Link>{" "}
+          •{" "}
+          <Link href="/terms" className="hover:underline">
+            Terms
+          </Link>{" "}
+          •{" "}
+          <Link
+            href="https://twitter.com/hulkastorus"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:underline"
+          >
+            Twitter
+          </Link>
+        </p>
       </footer>
     </div>
   );
