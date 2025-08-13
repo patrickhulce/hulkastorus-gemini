@@ -20,6 +20,48 @@ model User {
   is_email_verified Boolean   @default(false)
   created_at        DateTime  @default(now()) @map("created_at")
   updated_at        DateTime  @updatedAt @map("updated_at")
+  directories       Directory[]
+  files             File[]
 
   @@map("users") // Map model name to table name
+}
+
+model Directory {
+  id                      String    @id @default(cuid())
+  user_id                 String
+  parent_id               String?
+  full_path               String
+  default_expiration_policy String
+  default_permissions     String
+  created_at              DateTime  @default(now())
+  updated_at              DateTime  @updatedAt
+
+  user                    User      @relation(fields: [user_id], references: [id])
+  parent                  Directory? @relation("ChildDirectories", fields: [parent_id], references: [id])
+  children                Directory[] @relation("ChildDirectories")
+  files                   File[]
+
+  @@map("directories")
+}
+
+model File {
+  id                String    @id @default(cuid())
+  user_id           String
+  directory_id      String
+  status            String
+  r2_locator        String
+  expiration_policy String
+  full_path         String
+  filename          String
+  mime_type         String
+  size_bytes        Int
+  permissions       String
+  created_at        DateTime  @default(now())
+  updated_at        DateTime  @updatedAt
+  expires_at        DateTime?
+
+  user              User      @relation(fields: [user_id], references: [id])
+  directory         Directory @relation(fields: [directory_id], references: [id])
+
+  @@map("files")
 }

@@ -6,7 +6,6 @@ let s3Server: S3rver | null = null;
 export const startS3MockServer = async () => {
   s3Server = new S3rver({
     port: 4569,
-    hostname: "localhost",
     silent: true,
     directory: "/tmp/s3rver_test_directory", // Use a temporary directory
   });
@@ -16,13 +15,14 @@ export const startS3MockServer = async () => {
   AWS.config.update({
     accessKeyId: "S3RVER",
     secretAccessKey: "S3RVER",
-    endpoint: "http://localhost:4569",
-    s3ForcePathStyle: true,
     signatureVersion: "v4",
   });
 
-  // Create a new S3 instance with the updated config
-  return new AWS.S3();
+  // Create a new S3 instance with the updated config and endpoint
+  return new AWS.S3({
+    endpoint: "http://localhost:4569",
+    s3ForcePathStyle: true,
+  });
 };
 
 export const stopS3MockServer = async () => {

@@ -1,4 +1,4 @@
-import { startS3MockServer } from "./e2e/utils";
+import {startS3MockServer} from "./e2e/utils";
 
 export default async function globalSetup() {
   console.log("Starting S3 mock server...");

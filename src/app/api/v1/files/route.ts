@@ -1,9 +1,9 @@
-import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { prisma } from "@/lib/prisma";
+import {NextResponse} from "next/server";
+import {getServerSession} from "next-auth";
+import {authOptions} from "@/app/api/auth/[...nextauth]/route";
+import {prisma} from "@/lib/prisma";
 import AWS from "aws-sdk";
-import { nanoid } from "nanoid";
+import {nanoid} from "nanoid";
 
 const s3 = new AWS.S3();
 
@@ -11,28 +11,33 @@ export async function POST(request: Request) {
   const session = await getServerSession(authOptions);
 
   if (!session || !session.user || !session.user.email) {
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({message: "Unauthorized"}, {status: 401});
   }
 
   const user = await prisma.user.findUnique({
-    where: { email: session.user.email },
+    where: {email: session.user.email},
   });
 
   if (!user) {
-    return NextResponse.json({ message: "User not found" }, { status: 404 });
+    return NextResponse.json({message: "User not found"}, {status: 404});
   }
 
   // TODO: Implement quota check
   // TODO: Implement email verification check
 
-  const { filename, mime_type, size_bytes, directory_id } = await request.json();
+  const {filename, mime_type, size_bytes, directory_id} = await request.json();
 
   if (!filename || !mime_type || !size_bytes) {
-    return NextResponse.json({ message: "Missing required fields" }, { status: 400 });
+    return NextResponse.json({message: "Missing required fields"}, {status: 400});
   }
 
   const fileId = nanoid();
   const r2Locator = `uploads/${user.id}/${fileId}`;
+
+  const R2_BUCKET_NAME = process.env.R2_BUCKET_NAME;
+  if (!R2_BUCKET_NAME) {
+    return NextResponse.json({message: "R2_BUCKET_NAME is not defined"}, {status: 500});
+  }
 
   try {
     const file = await prisma.file.create({
@@ -52,16 +57,16 @@ export async function POST(request: Request) {
     });
 
     const presignedUrl = s3.getSignedUrl("putObject", {
-      Bucket: process.env.R2_BUCKET_NAME,
+      Bucket: R2_BUCKET_NAME,
       Key: r2Locator,
       Expires: 60 * 5, // 5 minutes
       ContentType: mime_type,
       ContentLength: size_bytes,
     });
 
-    return NextResponse.json({ fileId: file.id, presignedUrl });
+    return NextResponse.json({fileId: file.id, presignedUrl});
   } catch (error) {
     console.error("Error creating file or presigned URL:", error);
-    return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
+    return NextResponse.json({message: "Internal Server Error"}, {status: 500});
   }
 }
