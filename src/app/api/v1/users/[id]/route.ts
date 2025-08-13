@@ -2,9 +2,9 @@ import {NextResponse} from "next/server";
 import {prisma} from "@/lib/prisma";
 import {Prisma} from "@prisma/client";
 
-export async function DELETE(request: Request & {params: Promise<{id: string}>}) {
+export async function DELETE(request: Request, context: {params: Promise<{id: string}>}) {
   try {
-    const {id} = await request.params;
+    const {id} = await context.params;
 
     if (!id) {
       return NextResponse.json({error: "User ID is required"}, {status: 400});
