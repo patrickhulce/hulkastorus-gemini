@@ -1,7 +1,7 @@
-import { test, expect } from "@playwright/test";
+import {test, expect} from "@playwright/test";
 
 test.describe("Login Flow", () => {
-  test("should display login form elements", async ({ page }) => {
+  test("should display login form elements", async ({page}) => {
     await page.goto("/login");
 
     // Check for email input
@@ -13,7 +13,7 @@ test.describe("Login Flow", () => {
     await expect(passwordInput).toBeVisible();
 
     // Check for login button
-    const loginButton = page.getByRole("button", { name: "🦖 Log In" });
+    const loginButton = page.getByRole("button", {name: "🦖 Log In"});
     await expect(loginButton).toBeVisible();
 
     // Fill in dummy credentials
@@ -27,17 +27,17 @@ test.describe("Login Flow", () => {
     // For now, just ensure the click doesn't throw an immediate error
   });
 
-  test("should navigate to register page from login", async ({ page }) => {
+  test("should navigate to register page from login", async ({page}) => {
     await page.goto("/login");
-    const registerLink = page.getByRole("link", { name: "Sign up →" });
+    const registerLink = page.getByRole("link", {name: "Sign up →"});
     await expect(registerLink).toBeVisible();
     await registerLink.click();
     await expect(page).toHaveURL(/.*\/register/);
   });
 
-  test("should navigate to reset password page from login", async ({ page }) => {
+  test("should navigate to reset password page from login", async ({page}) => {
     await page.goto("/login");
-    const forgotPasswordLink = page.getByRole("link", { name: "Forgot your password?" });
+    const forgotPasswordLink = page.getByRole("link", {name: "Forgot your password?"});
     await expect(forgotPasswordLink).toBeVisible();
     await forgotPasswordLink.click();
     await expect(page).toHaveURL(/.*\/reset-password/);

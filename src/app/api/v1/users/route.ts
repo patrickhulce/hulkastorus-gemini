@@ -1,26 +1,34 @@
 import {NextResponse} from "next/server";
 import {prisma} from "@/lib/prisma";
 import {Prisma} from "@prisma/client";
+import bcrypt from "bcrypt";
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
     const {email, password, first_name, last_name, invite_code} = body;
 
-    // Basic validation (as per requirement, no extensive validation)
+    // Basic validation
     if (!email || !password) {
       return NextResponse.json({error: "Email and password are required"}, {status: 400});
     }
+
+    // Invite code check
+    if (invite_code !== "WELCOMETOTHEPARTYPAL") {
+      return NextResponse.json({error: "Invalid invite code"}, {status: 403});
+    }
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create user using Prisma
     const user = await prisma.user.create({
       data: {
         email,
-        password, // In a real app, hash this password!
+        password: hashedPassword,
         first_name,
         last_name,
         invite_code,
-        // is_email_verified defaults to false
       },
     });
 
