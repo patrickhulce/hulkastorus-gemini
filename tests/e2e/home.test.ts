@@ -7,8 +7,8 @@ test("has title", async ({page}) => {
   await expect(page).toHaveTitle(/Hulkastorus/);
 });
 
-test("deploy now button", async ({page}) => {
+test("request invite button", async ({page}) => {
   await page.goto("/");
-  const deployNowButton = page.getByText("Deploy now");
-  await expect(deployNowButton).toBeVisible();
+  const requestInviteButton = page.getByText("Request an Invite");
+  await expect(requestInviteButton).toBeVisible();
 });
