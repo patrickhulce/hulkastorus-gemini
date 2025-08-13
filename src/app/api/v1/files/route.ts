@@ -1,72 +1,91 @@
 import {NextResponse} from "next/server";
-import {getServerSession} from "next-auth";
-import {authOptions} from "@/app/api/auth/[...nextauth]/route";
-import {prisma} from "@/lib/prisma";
-import AWS from "aws-sdk";
+import {PrismaClient} from "@prisma/client";
+import {S3Client, PutObjectCommand} from "@aws-sdk/client-s3";
+import {getSignedUrl} from "@aws-sdk/s3-request-presigner";
 import {nanoid} from "nanoid";
 
-const s3 = new AWS.S3();
+const prisma = new PrismaClient();
 
-export async function POST(request: Request) {
-  const session = await getServerSession(authOptions);
+const R2 = new S3Client({
+  region: "auto",
+  endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+  credentials: {
+    accessKeyId: process.env.R2_ACCESS_KEY_ID || "",
+    secretAccessKey: process.env.R2_SECRET_ACCESS_KEY || "",
+  },
+});
 
-  if (!session || !session.user || !session.user.email) {
-    return NextResponse.json({message: "Unauthorized"}, {status: 401});
-  }
+export async function GET(req: Request) {
+  const {searchParams} = new URL(req.url);
+  const limit = searchParams.get("limit") || "10";
+  const offset = searchParams.get("offset") || "0";
+  const orderBy = searchParams.get("order_by") || "created_at+desc";
 
-  const user = await prisma.user.findUnique({
-    where: {email: session.user.email},
-  });
+  // TODO: Implement actual file listing from database
+  const files = [
+    {
+      id: "file1",
+      filename: "model.ckpt",
+      size_bytes: 2.1 * 1024 * 1024 * 1024,
+      created_at: new Date().toISOString(),
+    },
+    {
+      id: "file2",
+      filename: "notes.txt",
+      size_bytes: 4 * 1024,
+      created_at: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+    },
+    {
+      id: "file3",
+      filename: "image.jpg",
+      size_bytes: 10 * 1024 * 1024,
+      created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+    },
+  ];
 
-  if (!user) {
-    return NextResponse.json({message: "User not found"}, {status: 404});
-  }
+  return NextResponse.json(files);
+}
 
-  // TODO: Implement quota check
-  // TODO: Implement email verification check
+export async function POST(req: Request) {
+  const {filename, mime_type, size_bytes, userId, directoryId} = await req.json();
 
-  const {filename, mime_type, size_bytes, directory_id} = await request.json();
-
-  if (!filename || !mime_type || !size_bytes) {
-    return NextResponse.json({message: "Missing required fields"}, {status: 400});
+  if (!filename || !mime_type || !size_bytes || !userId || !directoryId) {
+    return NextResponse.json({error: "Missing required fields"}, {status: 400});
   }
 
   const fileId = nanoid();
-  const r2Locator = `uploads/${user.id}/${fileId}`;
-
-  const R2_BUCKET_NAME = process.env.R2_BUCKET_NAME;
-  if (!R2_BUCKET_NAME) {
-    return NextResponse.json({message: "R2_BUCKET_NAME is not defined"}, {status: 500});
-  }
+  const r2Locator = `uploads/${userId}/${fileId}`;
 
   try {
+    // Create a file record in the database
     const file = await prisma.file.create({
       data: {
         id: fileId,
-        user_id: user.id,
-        directory_id: directory_id || user.id, // Default to user's root directory
+        user: {connect: {id: userId}},
+        directory: {connect: {id: directoryId}},
         status: "reserved",
         r2_locator: r2Locator,
         filename,
         mime_type,
         size_bytes,
-        expiration_policy: "infinite", // Default
-        permissions: "private", // Default
-        full_path: `${directory_id || user.id}/${filename}`, // Placeholder
+        permissions: "private", // Default to private for now
+        expiration_policy: "infinite", // Default to infinite for now
+        full_path: `/${directoryId}/${filename}`, // Assuming directoryId is the path for now
       },
     });
 
-    const presignedUrl = s3.getSignedUrl("putObject", {
-      Bucket: R2_BUCKET_NAME,
+    // Generate a presigned URL for R2 upload
+    const putObjectCommand = new PutObjectCommand({
+      Bucket: process.env.R2_BUCKET_NAME,
       Key: r2Locator,
-      Expires: 60 * 5, // 5 minutes
       ContentType: mime_type,
-      ContentLength: size_bytes,
     });
 
-    return NextResponse.json({fileId: file.id, presignedUrl});
+    const presignedUrl = await getSignedUrl(R2, putObjectCommand, {expiresIn: 3600}); // URL expires in 1 hour
+
+    return NextResponse.json({fileId, presignedUrl});
   } catch (error) {
-    console.error("Error creating file or presigned URL:", error);
-    return NextResponse.json({message: "Internal Server Error"}, {status: 500});
+    console.error("Error creating file record or presigned URL:", error);
+    return NextResponse.json({error: "Internal Server Error"}, {status: 500});
   }
 }

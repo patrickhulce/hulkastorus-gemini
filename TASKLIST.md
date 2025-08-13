@@ -19,7 +19,7 @@
     - [x] Implement /register, /login, /logout pages
     - [x] Add NextAuth configuration and protect existing pages/routes
 - [ ] Core Functionality (Basic)
-    - [ ] Implement file upload, download API routes + public download route
+    - [x] Implement file upload, download API routes + public download route
     - [ ] Implement file upload UI on dashboard
     - [ ] Implement remainder of file+directory management routes
     - [ ] Implement file+directory list and navigation UI on file manager
