@@ -8,6 +8,7 @@
     - [x] Add placeholder pages for all pages in the app
     - [x] Implement API-level test suite harness
     - [x] Implement basic e2e test harness with playwright
+        - [x] Add e2e tests for the login flow
     - [x] Add GitHub Actions workflow for CI/CD
     - [x] Implement homepage
     - [x] Implement app shell UI layout (dummy content for now)
